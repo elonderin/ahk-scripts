@@ -1,7 +1,13 @@
 ; shortcuts to workaround win10 hogging of keys and other utils
+; ------ HELP
+; # win
+; ! alt
+; + ctrl
+; ^ shift
 
 ; --------------------------
 ; virtua win
+; win+ctrl+left/right are now taken by windows remap them to win+alt+left/right which has to be now the config'ed setting in VWin
 #^Left::
 	SendInput, #!{Left}
 return
@@ -25,6 +31,12 @@ if !WinActive("Ditto") {
 }
 return
 
+
+; --------------------------
+; one note sniping tool back on win+s
+#s::
+Send #+s
+return
 
 ; --------------------------
 ; win + ` -- switch to next of same app
@@ -57,3 +69,5 @@ Else {
 	WinActivateBottom, ahk_pid %ActiveProcess%
 }
 return
+
+
