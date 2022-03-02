@@ -31,7 +31,6 @@ if !WinActive("Ditto") {
 }
 return
 
-
 ; --------------------------
 ; one note sniping tool back on win+s
 #s::
@@ -40,7 +39,7 @@ return
 
 
 ; --------------------------
-; MS teams: remap ctrl+1-4 -> F1-4
+; MS teams: remap key bindings: ctrl+1-6 -> F1-6, etc
 #IfWinActive ahk_exe Teams.exe
 F1::^1
 F2::^2
@@ -48,6 +47,8 @@ F3::^3
 F4::^4
 F5::^5
 F6::^6
+F9::^+M
+F12::^+k
 return
 
 
@@ -83,5 +84,3 @@ Else {
 	WinActivateBottom, ahk_pid %ActiveProcess%
 }
 return
-
-
