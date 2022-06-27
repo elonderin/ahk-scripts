@@ -1,10 +1,11 @@
 ; shortcuts to workaround win10 hogging of keys and other utils
+; https://github.com/elonderin/ahk-scripts/blob/main/win10.ahk
+
 ; ------ HELP
 ; # win
 ; ! alt
 ; ^ ctrl
 ; + shift
-
 
 ; -------------------------
 ; PAUSE:  display off / goto sleep
