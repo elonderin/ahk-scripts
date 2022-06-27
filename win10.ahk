@@ -5,6 +5,19 @@
 ; ^ ctrl
 ; + shift
 
+
+; -------------------------
+; PAUSE:  display off / goto sleep
+PAUSE::
+	SoundBeep
+	Run, doff.bat
+return
+
++PAUSE::
+	SoundBeep, 750, 500
+	Run, sleep.bat
+return
+
 ; --------------------------
 ; virtua win
 ; win+ctrl+left/right are now taken by windows remap them to win+alt+left/right which has to be now the config'ed setting in VWin
@@ -41,6 +54,7 @@ return
 ; --------------------------
 ; MS teams: remap key bindings: ctrl+1-6 -> F1-6, etc
 #IfWinActive ahk_exe Teams.exe
+!F4::!F4
 F1::^1
 F2::^2
 F3::^3
@@ -49,6 +63,11 @@ F5::^5
 F6::^6
 F9::^+M
 F12::^+k
+return
+
+; zoom key bindings: to align them with teams
+#IfWinActive ahk_exe Zoom.exe
+F9::!a
 return
 
 
