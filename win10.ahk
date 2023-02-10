@@ -1,9 +1,26 @@
-; shortcuts to workaround win10 hogging of keys and other utils
+; shortcuts to workaround win10 hogging of keys and other global-ish utils
+; https://github.com/elonderin/ahk-scripts/blob/main/win10.ahk
+
+#SingleInstance Force
+
 ; ------ HELP
+; https://www.autohotkey.com/docs/v1/lib/Send.htm#keynames
 ; # win
 ; ! alt
 ; ^ ctrl
 ; + shift
+
+; -------------------------
+; PAUSE:  display off / goto sleep
+PAUSE::
+	SoundBeep
+	Run, doff.bat
+return
+
++PAUSE::
+	SoundBeep, 750, 500
+	Run, sleep.bat
+return
 
 ; --------------------------
 ; virtua win
@@ -14,9 +31,12 @@ return
 
 #^Right::
 	SendInput, #!{Right}
+return
 
 ; --------------------------
 ; DITTO
+; reqs:  tab "keyboard shortcuts"
+; show popup
 #c::
 if !WinActive("Ditto") {
 	SendInput, #{Ins}
@@ -24,6 +44,7 @@ if !WinActive("Ditto") {
 }
 return
 
+; paste plain text
 #v::
 if !WinActive("Ditto") {
 	SendInput, #+{Ins}
@@ -34,53 +55,33 @@ return
 ; --------------------------
 ; one note sniping tool back on win+s
 #s::
-Send #+s
+	Send #+s
 return
 
+; --------------------------
+; media key always goes to spotify (MS teams interferes often and then i wont work)
+Media_Play_Pause:
+	SetTitleMatchMode, 1
+	ControlSend ,, {Media_Play_Pause}, Spotify
+return
 
 ; --------------------------
 ; MS teams: remap key bindings: ctrl+1-6 -> F1-6, etc
 #IfWinActive ahk_exe Teams.exe
-F1::^1
-F2::^2
-F3::^3
-F4::^4
-F5::^5
-F6::^6
-F9::^+M
-F12::^+k
+!F4::!F4
+	F1::^1
+	F2::^2
+	F3::^3
+	F4::^4
+	F5::^5
+	F6::^6
+
+	F9::^+M
+	F10::^+o
+	F12::^+k
 return
 
-
-; ## i dont think, the rest below here work ATM
-
-; --------------------------
-; win + ` -- switch to next of same app
-;   note: SC029 is DE's '^' / EN's '`'
-; TODO
-;   + dont minimize to put to background
-;   + show list of windows
-;   + sort them by window id and be able to quickly select one by hitting the number, similar to alt + w, # in eclipse and other programs
-;   + integrate in alt+tab window selection -- if possible
-
-
-#!SC029::    ; Next window
-WinGet, ActiveProcess, PID, A
-WinGet, OpenWindowsAmount, Count, ahk_pid %ActiveProcess%
-If OpenWindowsAmount = 1  ; If only one Window exist, do nothing
-    Return
-Else {
-	WinSet, Bottom,, A
-	WinActivate, ahk_pid %ActiveProcess%
-}
-return
-
-#!+SC029::    ; Last window
-WinGet, ActiveProcess, PID, A
-WinGet, OpenWindowsAmount, Count, ahk_pid %ActiveProcess%
-If OpenWindowsAmount = 1  ; If only one Window exist, do nothing
-    Return
-Else {
-	WinActivateBottom, ahk_pid %ActiveProcess%
-}
+; zoom key bindings: to align them with teams
+#IfWinActive ahk_exe Zoom.exe
+   F9::!a
 return
