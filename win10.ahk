@@ -1,10 +1,14 @@
-; shortcuts to workaround win10 hogging of keys and other global-ish utils
+  ; shortcuts to workaround win10 hogging of keys and other global-ish utils
 ; https://github.com/elonderin/ahk-scripts/blob/main/win10.ahk
 
 #SingleInstance Force
 
 ; ------ HELP
+; https://www.autohotkey.com/docs/v1/KeyList.htm
 ; https://www.autohotkey.com/docs/v1/lib/Send.htm#keynames
+; https://www.win.tue.nl/~aeb/linux/kbd/scancodes-1.html
+; 	dbl click on AHK icon and then cltrl+k
+; https://jacks-autohotkey-blog.com/2016/04/14/understanding-autohotkey-keyboard-scan-codes-and-virtual-key-codes-beginning-hotkeys-part-12/
 ; # win
 ; ! alt
 ; ^ ctrl
@@ -19,7 +23,7 @@ return
 
 +PAUSE::
 	SoundBeep, 750, 500
-	Run, sleep.bat
+Run, sleep.bat
 return
 
 ; --------------------------
@@ -32,6 +36,19 @@ return
 #^Right::
 	SendInput, #!{Right}
 return
+
+; --------------------------
+; old cut/Copy/paste
+;https://www.autohotkey.com/docs/v1/lib/Send.htm#keynames
+;https://www.autohotkey.com/docs/v1/lib/Send.htm#Repeating_or_Holding_Down_a_Key
+;https://www.autohotkey.com/boards/viewtopic.php?t=13902
+;https://www.autohotkey.com/docs/v1/Hotkeys.htm
+; ## i need to release the mod keys on the left side, ie. +Del::^x results in +^x 
+; --------
+;^Ins::^c
+;+Ins::^v
+;+Del::^x
+
 
 ; --------------------------
 ; DITTO
@@ -59,10 +76,26 @@ return
 return
 
 ; --------------------------
-; media key always goes to spotify (MS teams interferes often and then i wont work)
-Media_Play_Pause:
-	SetTitleMatchMode, 1
-	ControlSend ,, {Media_Play_Pause}, Spotify
+; SPOTIFY
+; media key always goes to spotify (MS teams interferes often and then it wont work)
+SC122::
+Media_Play_Pause::
+	WinActivate, ahk_exe Spotify.exe
+	Send {Space}
+	WinSet, Bottom,,A
+return
+
+; ### aint working 
+	WinGet, active_id, ID, ahk_exe Spotify.exe
+	ControlSend ,ahk_parent,{Space}, ahk_id %active_id%
+; ### aint working -- might be due to the fakt of >1 processes
+	ControlSend ,ahk_parent,{Space}, ahk_exe Spotify.exe
+;	SoundBeep
+;#### works
+	WinGet, active_id, ID, A
+	WinActivate, ahk_exe Spotify.exe
+	Send {Space}
+	WinActivate, ahk_id %active_id%
 return
 
 ; --------------------------
@@ -85,3 +118,21 @@ return
 #IfWinActive ahk_exe Zoom.exe
    F9::!a
 return
+#IfWinActive
+
+; --------------------------------------
+; win 11: close window function when window maneu has been opend in taskbar
+; sample from spy:
+;	Jump List for Estlcam V12 CAM
+;	ahk_class Windows.UI.Core.CoreWindowccc
+;	ahk_exe ShellExperienceHost.exe
+;	ahk_pid 15576
+#if WinActive("ahk_exe ShellExperienceHost.exe") 
+		and WinActive("Jump List for")
+		and WinActive("ahk_class Windows.UI.Core.CoreWindow") 
+c::
+	SendInput {Up}{Space}
+return
+#if
+
+; ----
