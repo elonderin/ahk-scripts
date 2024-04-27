@@ -14,6 +14,32 @@
 ; ^ ctrl
 ; + shift
 
+
+; -------- move maxed intellij
+; the main use case is to move maxed intellij windows from one scren to the next, which causes them to flicker and crash sometimes
+; 	 by de-maximizing them this is mitigated.
+; so far i dont see the need to limit this just to WSL/intellij windows
+#+Left::MoveMaxedWindowWorkaround("{Left}")
+#+Right::MoveMaxedWindowWorkaround("{Right}")
+#+Up::MoveMaxedWindowWorkaround("{Up}")
+#+Down::MoveMaxedWindowWorkaround("{Down}")
+
+MoveMaxedWindowWorkaround(key){
+	WinGetActiveTitle, activeWindowTitle
+	WinGet, wasMax, MinMax, A
+
+	; Demaximize the active window
+	WinRestore, %activeWindowTitle%
+
+	SoundBeep, 750, 500
+
+	Send, #+%key%
+	if (wasMax = 1) {
+		WinMaximize, %activeWindowTitle%
+	}
+}
+
+
 ; -------------------------
 ; PAUSE:  display off / goto sleep
 PAUSE::
@@ -43,7 +69,7 @@ return
 ;https://www.autohotkey.com/docs/v1/lib/Send.htm#Repeating_or_Holding_Down_a_Key
 ;https://www.autohotkey.com/boards/viewtopic.php?t=13902
 ;https://www.autohotkey.com/docs/v1/Hotkeys.htm
-; ## i need to release the mod keys on the left side, ie. +Del::^x results in +^x 
+; ## i need to release the mod keys on the left side, ie. +Del::^x results in +^x
 ; --------
 ;^Ins::^c
 ;+Ins::^v
@@ -62,7 +88,8 @@ if !WinActive("Ditto") {
 return
 
 ; paste plain text
-#v::
+; workaround for win10/11 capturing win+v and also win+shift+v
+;#^v::
 if !WinActive("Ditto") {
 	SendInput, #+{Ins}
 	WinActivate, Ditto
@@ -85,7 +112,7 @@ Media_Play_Pause::
 	WinSet, Bottom,,A
 return
 
-; ### aint working 
+; ### aint working
 	WinGet, active_id, ID, ahk_exe Spotify.exe
 	ControlSend ,ahk_parent,{Space}, ahk_id %active_id%
 ; ### aint working -- might be due to the fakt of >1 processes
@@ -127,9 +154,9 @@ return
 ;	ahk_class Windows.UI.Core.CoreWindowccc
 ;	ahk_exe ShellExperienceHost.exe
 ;	ahk_pid 15576
-#if WinActive("ahk_exe ShellExperienceHost.exe") 
+#if WinActive("ahk_exe ShellExperienceHost.exe")
 		and WinActive("Jump List for")
-		and WinActive("ahk_class Windows.UI.Core.CoreWindow") 
+		and WinActive("ahk_class Windows.UI.Core.CoreWindow")
 c::
 	SendInput {Up}{Space}
 return
